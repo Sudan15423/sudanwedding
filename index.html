@@ -959,6 +959,15 @@
             pointer-events: none;
         }
 
+        /* FIX: Transparent Shield Overlay prevents browsers (Firefox/Safari) from capturing touch/click events prematurely */
+        .map-overlay-shield {
+            position: absolute;
+            inset: 0;
+            z-index: 5;
+            background: transparent;
+            cursor: pointer;
+        }
+
         .sub-tag {
             font-family: var(--font-sans);
             font-size: clamp(0.7rem, 2vmin, 0.8rem);
@@ -1549,6 +1558,7 @@
                     </div>
 
                     <div class="map-container" onclick="window.open('https://maps.app.goo.gl/GLvRtMdJfGXuYzjr6', '_blank')">
+                        <div class="map-overlay-shield"></div>
                         <iframe class="map-iframe" id="mapIframe" src="about:blank" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" loading="lazy" title="Mandala Banquet Location Map">
                         </iframe>
                     </div>
@@ -1735,7 +1745,6 @@
             }
         }
 
-        // FIX: Smart Swipe Detection to prevent accidental link clicks on mobile
         let touchStartX = 0;
         let touchStartY = 0;
         let isSwiping = false;
@@ -1750,7 +1759,6 @@
         container.addEventListener('touchmove', e => {
             const currentX = e.changedTouches[0].screenX;
             const currentY = e.changedTouches[0].screenY;
-            // If the finger moves more than 10px, we consider it a swipe
             if (Math.abs(currentX - touchStartX) > 10 || Math.abs(currentY - touchStartY) > 10) {
                 isSwiping = true;
             }
@@ -1763,16 +1771,13 @@
             if (distance > 50) moveSlide(-1);
             if (distance < -50) moveSlide(1);
             
-            // Keep the swiping flag active for a moment to intercept the synthetic click event
             if (isSwiping) {
                 setTimeout(() => { isSwiping = false; }, 100);
             }
         }, { passive: true });
 
-        // Intercept all clicks inside the carousel
         container.addEventListener('click', e => {
             const link = e.target.closest('a');
-            // If a link was clicked but we were just swiping, cancel the click
             if (link && isSwiping) {
                 e.preventDefault();
                 e.stopPropagation();
