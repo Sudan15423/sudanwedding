@@ -1620,7 +1620,9 @@
                     <div class="location-block">
                         <p class="location-title">Mandala Banquet (Prabhu Complex)</p>
                         <p class="location-address">Tinkune, Subidhanagar (3rd Floor)</p>
-                        <a href="https://maps.app.goo.gl/8Ay9vVRqwHyi19QA7" target="_blank" rel="noopener noreferrer"
+
+                        <!-- UPDATED MAP BUTTON LINK -->
+                        <a href="https://maps.app.goo.gl/GLvRtMdJfGXuYzjr6" target="_blank" rel="noopener noreferrer"
                             class="btn-action btn-outline map-btn">
                             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                 stroke-width="2">
@@ -1632,7 +1634,8 @@
                         </a>
                     </div>
 
-                    <a href="https://maps.app.goo.gl/8Ay9vVRqwHyi19QA7" target="_blank" rel="noopener noreferrer"
+                    <!-- UPDATED MAP WRAPPER LINK -->
+                    <a href="https://maps.app.goo.gl/GLvRtMdJfGXuYzjr6" target="_blank" rel="noopener noreferrer"
                         class="map-container">
                         <iframe class="map-iframe" id="mapIframe" src="about:blank" frameborder="0" scrolling="no"
                             marginheight="0" marginwidth="0" loading="lazy" title="Mandala Banquet Location Map">
@@ -1820,6 +1823,7 @@
             if (currentSlide === 3 && !mapLoaded) {
                 const mapFrame = document.getElementById('mapIframe');
                 if (mapFrame) {
+                    // THE FIX: Using exact coordinates for the map preview instead of the short link
                     mapFrame.src = "https://maps.google.com/maps?q=27.68564,85.34635&t=m&z=17&ie=UTF8&iwloc=near&output=embed";
                     mapLoaded = true;
                 }
