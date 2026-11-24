@@ -8,8 +8,7 @@
 
     <meta property="og:title" content="Sudan & Salina — Wedding Invitation">
     <meta property="og:description" content="Join us on 18 Mangsir, 5:00 PM · Mandala Banquet, Tinkune">
-    <meta property="og:image"
-        content="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1200&auto=format&fit=crop">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1200&auto=format&fit=crop">
     <meta property="og:type" content="website">
     <meta name="theme-color" content="#D6E8F6">
 
@@ -68,21 +67,6 @@
             flex-direction: column;
             position: relative;
         }
-
-        .map-container {
-            pointer-events: none;
-        }
-
-        .map-btn {
-            display: block;
-        }
-
-        @media (max-width: 767px) {
-            .map-container {
-                pointer-events: none;
-            }
-        }
-
 
         .sr-only {
             position: absolute;
@@ -169,15 +153,8 @@
         }
 
         @keyframes fadeUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .cover-logo-crest {
@@ -304,13 +281,8 @@
         }
 
         @keyframes shine {
-            0% {
-                background-position: 0% center;
-            }
-
-            100% {
-                background-position: 100% center;
-            }
+            0% { background-position: 0% center; }
+            100% { background-position: 100% center; }
         }
 
         .app-wrapper {
@@ -339,7 +311,6 @@
             max-width: 650px;
             height: 100%;
             max-height: 85dvh;
-            touch-action: pan-y;
         }
 
         .card {
@@ -357,23 +328,19 @@
             flex-direction: column;
             opacity: 0;
             visibility: hidden;
-            pointer-events: none;
             z-index: 1;
             transition: opacity 0.8s ease, visibility 0.8s;
-            touch-action: pan-y;
         }
 
         .card.active {
             opacity: 1;
             visibility: visible;
-            pointer-events: auto;
             z-index: 10;
         }
 
         .card.prev {
             opacity: 0;
             visibility: hidden;
-            pointer-events: none;
             z-index: 1;
         }
 
@@ -410,21 +377,11 @@
             padding-bottom: 2vh;
         }
 
-        .card-body::-webkit-scrollbar {
-            width: 4px;
-        }
-
-        .card-body::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        .card-body::-webkit-scrollbar-thumb {
-            background: rgba(212, 175, 55, 0.3);
-            border-radius: 4px;
-        }
+        .card-body::-webkit-scrollbar { width: 4px; }
+        .card-body::-webkit-scrollbar-track { background: transparent; }
+        .card-body::-webkit-scrollbar-thumb { background: rgba(212, 175, 55, 0.3); border-radius: 4px; }
 
         @supports not ((-webkit-background-clip: text) or (background-clip: text)) {
-
             .name-top,
             .name-bottom,
             .cover-title {
@@ -460,13 +417,8 @@
         }
 
         @keyframes flowGradient {
-            0% {
-                background-position: 0% center;
-            }
-
-            100% {
-                background-position: 200% center;
-            }
+            0% { background-position: 0% center; }
+            100% { background-position: 200% center; }
         }
 
         .name-top {
@@ -633,15 +585,8 @@
         }
 
         @keyframes tick-anim {
-            0% {
-                opacity: 0.2;
-                transform: translateY(-8px) scale(0.95);
-            }
-
-            100% {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
+            0% { opacity: 0.2; transform: translateY(-8px) scale(0.95); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
         }
 
         .timer-number-min.tick {
@@ -840,29 +785,12 @@
         }
 
         @keyframes heartPulse {
-            0% {
-                transform: scale(1);
-            }
-
-            14% {
-                transform: scale(1.15);
-            }
-
-            28% {
-                transform: scale(1);
-            }
-
-            42% {
-                transform: scale(1.15);
-            }
-
-            70% {
-                transform: scale(1);
-            }
-
-            100% {
-                transform: scale(1);
-            }
+            0% { transform: scale(1); }
+            14% { transform: scale(1.15); }
+            28% { transform: scale(1); }
+            42% { transform: scale(1.15); }
+            70% { transform: scale(1); }
+            100% { transform: scale(1); }
         }
 
         #slide-3 .card-body {
@@ -992,25 +920,10 @@
         }
 
         @keyframes floatWish {
-            0% {
-                opacity: 0;
-                transform: translate(-50%, -40%) scale(0.9);
-            }
-
-            15% {
-                opacity: 1;
-                transform: translate(-50%, -50%) scale(1);
-            }
-
-            80% {
-                opacity: 1;
-                transform: translate(-50%, -60%) scale(1);
-            }
-
-            100% {
-                opacity: 0;
-                transform: translate(-50%, -70%) scale(1);
-            }
+            0% { opacity: 0; transform: translate(-50%, -40%) scale(0.9); }
+            15% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+            80% { opacity: 1; transform: translate(-50%, -60%) scale(1); }
+            100% { opacity: 0; transform: translate(-50%, -70%) scale(1); }
         }
 
         .map-container {
@@ -1035,19 +948,8 @@
             filter: saturate(1) contrast(1) brightness(1);
         }
 
-        /* Mobile / touch devices: visual map is purely non-interactive;
-           only the Map button opens Google Maps. */
-        @media (hover: none),
-        (pointer: coarse) {
-            .map-container {
-                pointer-events: none !important;
-                cursor: default !important;
-            }
-
-            .map-overlay-shield {
-                display: none !important;
-                pointer-events: none !important;
-            }
+        .map-locked {
+            pointer-events: none !important;
         }
 
         .map-iframe {
@@ -1397,10 +1299,7 @@
         }
 
         @media (prefers-reduced-motion: reduce) {
-
-            *,
-            *::before,
-            *::after {
+            *, *::before, *::after {
                 animation-duration: 0.01ms !important;
                 animation-iteration-count: 1 !important;
                 transition-duration: 0.01ms !important;
@@ -1438,6 +1337,19 @@
                 top: 30%;
             }
         }
+
+        /* MOBILE VIEW: hide the Map button and disable the map container's
+           click behavior entirely, so no auto-click can open Google Maps
+           on mobile browsers (Firefox mobile in particular). */
+        @media (max-width: 767px) {
+            .map-btn {
+                display: none !important;
+            }
+            .map-container {
+                pointer-events: none !important;
+                cursor: default;
+            }
+        }
     </style>
 </head>
 
@@ -1445,14 +1357,8 @@
 
     <noscript>
         <style>
-            #coverScreen {
-                display: none !important;
-            }
-
-            .app-wrapper {
-                opacity: 1 !important;
-                transform: none !important;
-            }
+            #coverScreen { display: none !important; }
+            .app-wrapper { opacity: 1 !important; transform: none !important; }
         </style>
     </noscript>
 
@@ -1492,15 +1398,13 @@
     </audio>
 
     <div class="audio-container" id="audioContainer">
-        <input type="range" id="volumeSlider" class="volume-slider" min="0" max="100" value="100"
-            aria-label="Volume Slider">
+        <input type="range" id="volumeSlider" class="volume-slider" min="0" max="100" value="100" aria-label="Volume Slider">
 
         <button class="audio-toggle" id="audioBtn" title="Toggle Background Music" aria-label="Toggle Background Music">
             <svg id="musicIconPlay" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <polygon points="5 3 19 12 5 21 5 3"></polygon>
             </svg>
-            <svg id="musicIconPause" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                style="display:none;">
+            <svg id="musicIconPause" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none;">
                 <path d="M9 18V5l12-2v13" />
                 <circle cx="6" cy="18" r="3" />
                 <circle cx="18" cy="16" r="3" />
@@ -1573,12 +1477,9 @@
                     <h2 class="story-title">Our Story</h2>
 
                     <div class="collage-container">
-                        <img src="photo-left.jpg" onerror="this.style.display='none'" alt="Our Adventures"
-                            class="collage-img img-1" loading="lazy">
-                        <img src="photo-right.jpg" onerror="this.style.display='none'" alt="Making Memories"
-                            class="collage-img img-2" loading="lazy">
-                        <img src="photo-center.jpg" onerror="this.style.display='none'" alt="First Meeting"
-                            class="collage-img img-3" loading="lazy">
+                        <img src="photo-left.jpg" onerror="this.style.display='none'" alt="Our Adventures" class="collage-img img-1" loading="lazy">
+                        <img src="photo-right.jpg" onerror="this.style.display='none'" alt="Making Memories" class="collage-img img-2" loading="lazy">
+                        <img src="photo-center.jpg" onerror="this.style.display='none'" alt="First Meeting" class="collage-img img-3" loading="lazy">
                     </div>
 
                     <p class="story-text-paragraph">
@@ -1612,8 +1513,7 @@
                             <div class="connector-line-top"></div>
                             <div class="connector-icon">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                    <path
-                                        d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
                                 </svg>
                             </div>
                             <div class="connector-line-bottom"></div>
@@ -1638,8 +1538,7 @@
 
                 <div class="card-body">
                     <span class="sub-tag" style="margin-bottom: 0.5vh;">Program Details</span>
-                    <h2
-                        style="font-family: var(--font-cursive); font-weight: 700; color: var(--text-main); margin-bottom: 0; text-shadow: 1px 1px 4px rgba(255,255,255,0.9);">
+                    <h2 style="font-family: var(--font-cursive); font-weight: 700; color: var(--text-main); margin-bottom: 0; text-shadow: 1px 1px 4px rgba(255,255,255,0.9);">
                         When &amp; Where</h2>
 
                     <div class="timeline">
@@ -1663,22 +1562,20 @@
                     <div class="location-block">
                         <p class="location-title">Mandala Banquet (Prabhu Complex)</p>
                         <p class="location-address">Tinkune, Subidhanagar (3rd Floor)</p>
-
-                        <button type="button" id="mapBtn" class="btn-action btn-outline map-btn">
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
+                        
+                        <a href="https://maps.app.goo.gl/GLvRtMdJfGXuYzjr6" target="_blank" rel="noopener noreferrer" class="btn-action btn-outline map-btn">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <polygon points="1 6 1 22 8 18 15 22 22 18 22 2 15 6 8 2 1 6" />
                                 <line x1="8" y1="2" x2="8" y2="18" />
                                 <line x1="15" y1="6" x2="15" y2="22" />
                             </svg>
                             <span>Map</span>
-                        </button>
+                        </a>
                     </div>
 
-                    <div class="map-container" id="mapContainer">
-                        <div class="map-overlay-shield" id="mapOverlayShield"></div>
-                        <iframe class="map-iframe" id="mapIframe" src="about:blank" frameborder="0" scrolling="no"
-                            marginheight="0" marginwidth="0" loading="lazy" title="Mandala Banquet Location Map">
+                    <div class="map-container" id="mapContainer" role="button" tabindex="0" aria-label="Open Mandala Banquet location in Google Maps">
+                        <div class="map-overlay-shield"></div>
+                        <iframe class="map-iframe" id="mapIframe" src="about:blank" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" loading="lazy" title="Mandala Banquet Location Map">
                         </iframe>
                     </div>
                 </div>
@@ -1696,16 +1593,13 @@
 
                 <div class="card-body">
                     <span class="sub-tag">Kindly Respond</span>
-                    <h2
-                        style="font-family: var(--font-cursive); font-size: clamp(2.2rem, 5vmin, 2.8rem); font-weight: 700; color: var(--text-main); margin-bottom: 1vh; text-shadow: 1px 1px 4px rgba(255,255,255,0.9);">
+                    <h2 style="font-family: var(--font-cursive); font-size: clamp(2.2rem, 5vmin, 2.8rem); font-weight: 700; color: var(--text-main); margin-bottom: 1vh; text-shadow: 1px 1px 4px rgba(255,255,255,0.9);">
                         Join Our Day</h2>
-                    <p
-                        style="color: var(--text-main); font-size: clamp(0.9rem, 2.2vmin, 1rem); margin-bottom: 3vh; text-shadow: 1px 1px 4px rgba(255,255,255,0.9);">
+                    <p style="color: var(--text-main); font-size: clamp(0.9rem, 2.2vmin, 1rem); margin-bottom: 3vh; text-shadow: 1px 1px 4px rgba(255,255,255,0.9);">
                         Your presence and love will complete our grand celebration!
                     </p>
 
-                    <button class="btn-action btn-burgundy-gold" onclick="triggerAttendance()"
-                        style="max-width: 300px;">
+                    <button class="btn-action btn-burgundy-gold" onclick="triggerAttendance()" style="max-width: 300px;">
                         <span>✨ Will Attend ✨</span>
                     </button>
                 </div>
@@ -1723,11 +1617,9 @@
             <button class="modal-close" onclick="closeModal()" aria-label="Close modal">&times;</button>
             <div class="rose-burst">🌹</div>
             <span class="sub-tag">Confirmation Received</span>
-            <h2 id="modalTitle"
-                style="font-family: var(--font-cursive); font-size: clamp(2rem, 6vmin, 3rem); font-weight: 700; color: var(--text-main); margin: 1vh 0;">
+            <h2 id="modalTitle" style="font-family: var(--font-cursive); font-size: clamp(2rem, 6vmin, 3rem); font-weight: 700; color: var(--text-main); margin: 1vh 0;">
                 Thank You!</h2>
-            <p
-                style="font-family: var(--font-serif); font-size: clamp(1rem, 2.5vmin, 1.25rem); color: var(--text-muted); line-height: 1.5; margin-bottom: 1vh;">
+            <p style="font-family: var(--font-serif); font-size: clamp(1rem, 2.5vmin, 1.25rem); color: var(--text-muted); line-height: 1.5; margin-bottom: 1vh;">
                 Thank you for confirming! We can't wait to see you at the wedding! 🎉
             </p>
         </div>
@@ -1735,7 +1627,6 @@
 
     <script>
         const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        const isMobileOrTouch = window.matchMedia('(hover: none), (pointer: coarse)').matches || navigator.maxTouchPoints > 0;
 
         const bgMusic = document.getElementById('bgMusic');
         const audioBtn = document.getElementById('audioBtn');
@@ -1759,7 +1650,7 @@
             musicIconPause.style.display = 'none';
         });
 
-        bgMusic.addEventListener('error', () => {
+        bgMusic.addEventListener('error', (e) => {
             musicIconPlay.style.display = 'block';
             musicIconPause.style.display = 'none';
         });
@@ -1839,21 +1730,14 @@
         const totalSlides = slides.length;
         const slideTitles = ['The Wedding Of Sudan & Salina', 'Our Story', 'Family Honors', 'When & Where', 'RSVP'];
         let mapLoaded = false;
-        let slide3EnteredAt = 0;
-
-        // Verified stationary tap state for the Map button on mobile/touch
-        let validMapBtnTapUntil = 0;
-        let mapBtnTouchStart = null;
+        let slide3LockedUntil = 0;
+        const MAP_LOCK_MS = 800;
 
         function announceSlide(index) {
             document.getElementById('slideAnnouncer').innerText = `Slide ${index + 1} of ${totalSlides}: ${slideTitles[index]}`;
         }
 
         function moveSlide(direction) {
-            // Reset any pending tap validation whenever slides change
-            validMapBtnTapUntil = 0;
-            mapBtnTouchStart = null;
-
             slides[currentSlide].classList.remove('active');
 
             if (direction > 0) {
@@ -1871,7 +1755,15 @@
             announceSlide(currentSlide);
 
             if (currentSlide === 3) {
-                slide3EnteredAt = Date.now();
+                slide3LockedUntil = Date.now() + MAP_LOCK_MS;
+                const mc = document.getElementById('mapContainer');
+                const mb = document.querySelector('.map-btn');
+                if (mc) mc.classList.add('map-locked');
+                if (mb) mb.classList.add('map-locked');
+                setTimeout(() => {
+                    if (mc) mc.classList.remove('map-locked');
+                    if (mb) mb.classList.remove('map-locked');
+                }, MAP_LOCK_MS);
 
                 if (!mapLoaded) {
                     const mapFrame = document.getElementById('mapIframe');
@@ -1887,18 +1779,16 @@
         let touchStartY = 0;
         let isSwiping = false;
         let suppressClickUntil = 0;
-        const SWIPE_CLICK_BLOCK_MS = 1400;
+        const SWIPE_CLICK_BLOCK_MS = 800;
         const container = document.querySelector('.carousel-container');
 
         container.addEventListener('touchstart', e => {
-            if (!e.changedTouches || !e.changedTouches[0]) return;
             touchStartX = e.changedTouches[0].screenX;
             touchStartY = e.changedTouches[0].screenY;
             isSwiping = false;
         }, { passive: true });
 
         container.addEventListener('touchmove', e => {
-            if (!e.changedTouches || !e.changedTouches[0]) return;
             const currentX = e.changedTouches[0].screenX;
             const currentY = e.changedTouches[0].screenY;
             if (Math.abs(currentX - touchStartX) > 10 || Math.abs(currentY - touchStartY) > 10) {
@@ -1907,22 +1797,14 @@
         }, { passive: true });
 
         container.addEventListener('touchend', e => {
+            if (isSwiping) {
+                suppressClickUntil = Date.now() + SWIPE_CLICK_BLOCK_MS;
+            }
             if (e.changedTouches && e.changedTouches[0]) {
                 const touchEndX = e.changedTouches[0].screenX;
-                const touchEndY = e.changedTouches[0].screenY;
-                const distanceX = touchEndX - touchStartX;
-                const distanceY = touchEndY - touchStartY;
-
-                if (isSwiping || Math.abs(distanceX) > 10 || Math.abs(distanceY) > 10) {
-                    suppressClickUntil = Date.now() + SWIPE_CLICK_BLOCK_MS;
-                    validMapBtnTapUntil = 0;
-                }
-
-                if (distanceX > 50) moveSlide(-1);
-                if (distanceX < -50) moveSlide(1);
-            } else if (isSwiping) {
-                suppressClickUntil = Date.now() + SWIPE_CLICK_BLOCK_MS;
-                validMapBtnTapUntil = 0;
+                const distance = touchEndX - touchStartX;
+                if (distance > 50) moveSlide(-1);
+                if (distance < -50) moveSlide(1);
             }
         }, { passive: true });
 
@@ -1941,15 +1823,11 @@
             }
         });
         container.addEventListener('mouseup', e => {
-            const distX = Math.abs(e.clientX - mouseDragStartX);
-            const distY = Math.abs(e.clientY - mouseDragStartY);
-            if (isMouseDragging || distX > 10 || distY > 10) {
+            if (isMouseDragging) {
                 suppressClickUntil = Date.now() + SWIPE_CLICK_BLOCK_MS;
-                validMapBtnTapUntil = 0;
             }
         });
 
-        // Capture-phase blocker for all synthetic/ghost clicks after a swipe
         document.addEventListener('click', e => {
             if (Date.now() < suppressClickUntil) {
                 e.preventDefault();
@@ -1960,103 +1838,27 @@
 
         const MAP_URL = 'https://maps.app.goo.gl/GLvRtMdJfGXuYzjr6';
         const mapContainer = document.getElementById('mapContainer');
-        const mapOverlayShield = document.getElementById('mapOverlayShield');
 
-        function openMapLocation(fromVerifiedTap = false) {
-            if (currentSlide !== 3) return;
+        function openMapLocation() {
+            // MOBILE VIEW: map is hidden/disabled on mobile, so no map opening here.
+            if (window.matchMedia('(max-width: 767px)').matches) return;
+            if (Date.now() < slide3LockedUntil) return;
             if (Date.now() < suppressClickUntil) return;
-            if (Date.now() - slide3EnteredAt < 650) return;
-
-            if (isMobileOrTouch && !fromVerifiedTap && Date.now() > validMapBtnTapUntil) {
-                return;
-            }
-
-            validMapBtnTapUntil = 0;
-            window.open(MAP_URL, '_blank', 'noopener,noreferrer');
+            window.open(MAP_URL, '_blank', 'noopener');
         }
 
-        // Detect if it's a mobile device
-        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-
-        // Remove click event from map container on mobile devices
-        if (isMobile) {
-            const mapContainer = document.getElementById('mapContainer');
-            if (mapContainer) {
-                mapContainer.style.pointerEvents = 'none';
-            }
-        }
-
-        // Keep the map button functional on desktop only
-        const mapBtn = document.querySelector('.map-btn');
-        if (mapBtn) {
-            mapBtn.addEventListener('click', function (e) {
-                e.preventDefault();
-                if (!isMobile) {
-                    openMapLocation();
-                }
-            });
-        }
-
-
-        // Map button: verify that touchstart AND touchend both occurred
-        // directly on #mapBtn with < 8px movement (prevents all swipe/ghost clicks)
-        if (mapBtn) {
-            mapBtn.addEventListener('touchstart', e => {
-                if (currentSlide !== 3 || Date.now() - slide3EnteredAt < 650) {
-                    mapBtnTouchStart = null;
-                    return;
-                }
-                const t = e.changedTouches[0];
-                mapBtnTouchStart = { x: t.clientX, y: t.clientY, time: Date.now() };
-            }, { passive: true });
-
-            mapBtn.addEventListener('touchend', e => {
-                if (!mapBtnTouchStart) return;
-                const t = e.changedTouches[0];
-                const moveDist = Math.hypot(t.clientX - mapBtnTouchStart.x, t.clientY - mapBtnTouchStart.y);
-                const endTarget = document.elementFromPoint(t.clientX, t.clientY);
-                const releasedOnBtn = endTarget && endTarget.closest('#mapBtn') === mapBtn;
-                mapBtnTouchStart = null;
-
-                if (moveDist < 8 && releasedOnBtn && Date.now() >= suppressClickUntil) {
-                    validMapBtnTapUntil = Date.now() + 500;
-                    e.preventDefault();
-                    openMapLocation(true);
-                }
-            });
-
-            mapBtn.addEventListener('click', e => {
-                e.preventDefault();
-                e.stopPropagation();
-                if (isMobileOrTouch) {
-                    if (Date.now() <= validMapBtnTapUntil) {
-                        openMapLocation(true);
-                    }
-                    return;
-                }
-                openMapLocation(true);
-            });
-        }
-
-        // Visual map container: interactive ONLY on desktop (non-touch)
-        if (!isMobileOrTouch && mapContainer) {
-            mapContainer.setAttribute('role', 'button');
-            mapContainer.setAttribute('tabindex', '0');
-            mapContainer.setAttribute('aria-label', 'Open Mandala Banquet location in Google Maps');
-
+        if (mapContainer) {
             mapContainer.addEventListener('click', e => {
                 e.preventDefault();
                 e.stopPropagation();
-                openMapLocation(true);
+                openMapLocation();
             });
             mapContainer.addEventListener('keydown', e => {
                 if (e.key === 'Enter' || e.key === ' ') {
                     e.preventDefault();
-                    openMapLocation(true);
+                    openMapLocation();
                 }
             });
-        } else if (mapOverlayShield) {
-            mapOverlayShield.remove();
         }
 
         window.addEventListener('keydown', (e) => {
