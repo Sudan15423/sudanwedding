@@ -1338,18 +1338,7 @@
             }
         }
 
-        /* MOBILE VIEW: hide the Map button and disable the map container's
-           click behavior entirely, so no auto-click can open Google Maps
-           on mobile browsers (Firefox mobile in particular). */
-        @media (max-width: 767px) {
-            .map-btn {
-                display: none !important;
-            }
-            .map-container {
-                pointer-events: none !important;
-                cursor: default;
-            }
-        }
+        
     </style>
 </head>
 
@@ -1839,13 +1828,7 @@
         const MAP_URL = 'https://maps.app.goo.gl/GLvRtMdJfGXuYzjr6';
         const mapContainer = document.getElementById('mapContainer');
 
-        function openMapLocation() {
-            // MOBILE VIEW: map is hidden/disabled on mobile, so no map opening here.
-            if (window.matchMedia('(max-width: 767px)').matches) return;
-            if (Date.now() < slide3LockedUntil) return;
-            if (Date.now() < suppressClickUntil) return;
-            window.open(MAP_URL, '_blank', 'noopener');
-        }
+        
 
         if (mapContainer) {
             mapContainer.addEventListener('click', e => {
