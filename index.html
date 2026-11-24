@@ -1557,7 +1557,7 @@
                         </a>
                     </div>
 
-                    <div class="map-container" onclick="window.open('https://maps.app.goo.gl/GLvRtMdJfGXuYzjr6', '_blank')">
+                    <div class="map-container" id="mapContainer" role="button" tabindex="0" aria-label="Open Mandala Banquet location in Google Maps">
                         <div class="map-overlay-shield"></div>
                         <iframe class="map-iframe" id="mapIframe" src="about:blank" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" loading="lazy" title="Mandala Banquet Location Map">
                         </iframe>
@@ -1748,6 +1748,8 @@
         let touchStartX = 0;
         let touchStartY = 0;
         let isSwiping = false;
+        let suppressClickUntil = 0;
+        const SWIPE_CLICK_BLOCK_MS = 450;
         const container = document.querySelector('.carousel-container');
 
         container.addEventListener('touchstart', e => {
@@ -1767,22 +1769,40 @@
         container.addEventListener('touchend', e => {
             const touchEndX = e.changedTouches[0].screenX;
             const distance = touchEndX - touchStartX;
-            
+
+            if (isSwiping) {
+                suppressClickUntil = Date.now() + SWIPE_CLICK_BLOCK_MS;
+            }
+
             if (distance > 50) moveSlide(-1);
             if (distance < -50) moveSlide(1);
-            
-            if (isSwiping) {
-                setTimeout(() => { isSwiping = false; }, 100);
-            }
         }, { passive: true });
 
-        container.addEventListener('click', e => {
-            const link = e.target.closest('a');
-            if (link && isSwiping) {
+        document.addEventListener('click', e => {
+            if (Date.now() < suppressClickUntil) {
                 e.preventDefault();
                 e.stopPropagation();
+                e.stopImmediatePropagation();
             }
         }, true);
+
+        const MAP_URL = 'https://maps.app.goo.gl/GLvRtMdJfGXuYzjr6';
+        const mapContainer = document.getElementById('mapContainer');
+
+        function openMapLocation() {
+            if (Date.now() < suppressClickUntil) return;
+            window.open(MAP_URL, '_blank', 'noopener');
+        }
+
+        if (mapContainer) {
+            mapContainer.addEventListener('click', openMapLocation);
+            mapContainer.addEventListener('keydown', e => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    openMapLocation();
+                }
+            });
+        }
 
         window.addEventListener('keydown', (e) => {
             if (e.key === 'ArrowRight') moveSlide(1);
