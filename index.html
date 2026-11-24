@@ -1812,7 +1812,17 @@
         const slideTitles = ['The Wedding Of Sudan & Salina', 'Our Story', 'Family Honors', 'When & Where', 'RSVP'];
         let mapLoaded = false;
         let slide3LockedUntil = 0;
+        let slide3EnteredAt = 0;
+        let pointerDownTarget = null;
         const MAP_LOCK_MS = 1200;
+
+        document.addEventListener('pointerdown', (e) => {
+            pointerDownTarget = e.target;
+        }, true);
+
+        document.addEventListener('touchstart', (e) => {
+            pointerDownTarget = e.target;
+        }, { capture: true, passive: true });
 
         function announceSlide(index) {
             document.getElementById('slideAnnouncer').innerText = `Slide ${index + 1} of ${totalSlides}: ${slideTitles[index]}`;
@@ -1839,6 +1849,7 @@
                 // FIX: Lock the map + map button so a synthetic click from the
                 // swipe that brought us here cannot open Google Maps
                 // (Firefox mobile fires synthetic clicks unreliably).
+                slide3EnteredAt = Date.now();
                 slide3LockedUntil = Date.now() + MAP_LOCK_MS;
                 const mc = document.getElementById('mapContainer');
                 const mb = document.querySelector('.map-btn');
@@ -1940,6 +1951,17 @@
         function openMapLocation() {
             if (Date.now() < slide3LockedUntil) return;
             if (Date.now() < suppressClickUntil) return;
+
+            const startedOnMapTrigger =
+                pointerDownTarget &&
+                pointerDownTarget.closest &&
+                pointerDownTarget.closest('.map-btn, #mapContainer');
+
+            if (Date.now() - slide3EnteredAt < 1500 && !startedOnMapTrigger) {
+                return;
+            }
+
+            pointerDownTarget = null;
             window.open(MAP_URL, '_blank', 'noopener');
         }
 
