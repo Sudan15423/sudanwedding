@@ -7,7 +7,7 @@
     <title>Wedding Invitation Sudan & Salina</title>
 
     <meta property="og:title" content="Sudan & Salina — Wedding Invitation">
-    <meta property="og:description" content="Join us on 18 Mangsir, 4:30 PM · Mandala Banquet, Tinkune">
+    <meta property="og:description" content="Join us on 18 Mangsir, 5:00 PM · Mandala Banquet, Tinkune">
     <meta property="og:image" content="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1200&auto=format&fit=crop">
     <meta property="og:type" content="website">
     <meta name="theme-color" content="#D6E8F6">
@@ -948,6 +948,12 @@
             filter: saturate(1) contrast(1) brightness(1);
         }
 
+        /* FIX: Locks the map from being clickable to prevent swipe-triggered
+           synthetic clicks from opening Maps on Firefox mobile. */
+        .map-locked {
+            pointer-events: none !important;
+        }
+
         .map-iframe {
             position: absolute;
             top: -20%;
@@ -1422,7 +1428,7 @@
                             <div class="date-divider"></div>
                             <div class="date-stack">
                                 <span>Mangsir</span>
-                                <span>4:30 PM</span>
+                                <span>5:00 PM</span>
                             </div>
                         </div>
                         <div class="hero-location">Mandala Banquet (Prabhu Complex)</div>
@@ -1535,7 +1541,7 @@
                         </div>
 
                         <div class="event-card">
-                            <div class="event-time-badge">4:30 PM</div>
+                            <div class="event-time-badge">5:00 PM</div>
                             <div class="event-details">
                                 <h3>Time</h3>
                                 <p>Join us as we begin the celebration</p>
@@ -1675,7 +1681,7 @@
             }, 1200);
         }
 
-        const targetDate = new Date('December 4, 2026 16:30:00').getTime();
+        const targetDate = new Date('December 4, 2026 17:00:00').getTime();
         let lastSecond = -1;
 
         function updateCountdown() {
@@ -1714,6 +1720,8 @@
         const totalSlides = slides.length;
         const slideTitles = ['The Wedding Of Sudan & Salina', 'Our Story', 'Family Honors', 'When & Where', 'RSVP'];
         let mapLoaded = false;
+        let slide3LockedUntil = 0;
+        const MAP_LOCK_MS = 800;
 
         function announceSlide(index) {
             document.getElementById('slideAnnouncer').innerText = `Slide ${index + 1} of ${totalSlides}: ${slideTitles[index]}`;
@@ -1736,11 +1744,26 @@
             slides[currentSlide].classList.add('active');
             announceSlide(currentSlide);
 
-            if (currentSlide === 3 && !mapLoaded) {
-                const mapFrame = document.getElementById('mapIframe');
-                if (mapFrame) {
-                    mapFrame.src = "https://maps.google.com/maps?q=27.68564,85.34635&t=m&z=17&ie=UTF8&iwloc=near&output=embed";
-                    mapLoaded = true;
+            if (currentSlide === 3) {
+                // FIX: Lock the map + map button so a synthetic click from the
+                // swipe that brought us here cannot open Google Maps
+                // (Firefox mobile fires synthetic clicks unreliably).
+                slide3LockedUntil = Date.now() + MAP_LOCK_MS;
+                const mc = document.getElementById('mapContainer');
+                const mb = document.querySelector('.map-btn');
+                if (mc) mc.classList.add('map-locked');
+                if (mb) mb.classList.add('map-locked');
+                setTimeout(() => {
+                    if (mc) mc.classList.remove('map-locked');
+                    if (mb) mb.classList.remove('map-locked');
+                }, MAP_LOCK_MS);
+
+                if (!mapLoaded) {
+                    const mapFrame = document.getElementById('mapIframe');
+                    if (mapFrame) {
+                        mapFrame.src = "https://maps.google.com/maps?q=27.68564,85.34635&t=m&z=17&ie=UTF8&iwloc=near&output=embed";
+                        mapLoaded = true;
+                    }
                 }
             }
         }
@@ -1749,7 +1772,7 @@
         let touchStartY = 0;
         let isSwiping = false;
         let suppressClickUntil = 0;
-        const SWIPE_CLICK_BLOCK_MS = 450;
+        const SWIPE_CLICK_BLOCK_MS = 800;
         const container = document.querySelector('.carousel-container');
 
         container.addEventListener('touchstart', e => {
@@ -1767,16 +1790,38 @@
         }, { passive: true });
 
         container.addEventListener('touchend', e => {
-            const touchEndX = e.changedTouches[0].screenX;
-            const distance = touchEndX - touchStartX;
-
             if (isSwiping) {
                 suppressClickUntil = Date.now() + SWIPE_CLICK_BLOCK_MS;
             }
-
-            if (distance > 50) moveSlide(-1);
-            if (distance < -50) moveSlide(1);
+            if (e.changedTouches && e.changedTouches[0]) {
+                const touchEndX = e.changedTouches[0].screenX;
+                const distance = touchEndX - touchStartX;
+                if (distance > 50) moveSlide(-1);
+                if (distance < -50) moveSlide(1);
+            }
         }, { passive: true });
+
+        // Also track mouse drags so testing in responsive design mode behaves
+        // the same as real touch devices.
+        let mouseDragStartX = 0;
+        let mouseDragStartY = 0;
+        let isMouseDragging = false;
+        container.addEventListener('mousedown', e => {
+            mouseDragStartX = e.clientX;
+            mouseDragStartY = e.clientY;
+            isMouseDragging = false;
+        });
+        container.addEventListener('mousemove', e => {
+            if (e.buttons !== 1) return;
+            if (Math.abs(e.clientX - mouseDragStartX) > 10 || Math.abs(e.clientY - mouseDragStartY) > 10) {
+                isMouseDragging = true;
+            }
+        });
+        container.addEventListener('mouseup', e => {
+            if (isMouseDragging) {
+                suppressClickUntil = Date.now() + SWIPE_CLICK_BLOCK_MS;
+            }
+        });
 
         document.addEventListener('click', e => {
             if (Date.now() < suppressClickUntil) {
@@ -1790,12 +1835,17 @@
         const mapContainer = document.getElementById('mapContainer');
 
         function openMapLocation() {
+            if (Date.now() < slide3LockedUntil) return;
             if (Date.now() < suppressClickUntil) return;
             window.open(MAP_URL, '_blank', 'noopener');
         }
 
         if (mapContainer) {
-            mapContainer.addEventListener('click', openMapLocation);
+            mapContainer.addEventListener('click', e => {
+                e.preventDefault();
+                e.stopPropagation();
+                openMapLocation();
+            });
             mapContainer.addEventListener('keydown', e => {
                 if (e.key === 'Enter' || e.key === ' ') {
                     e.preventDefault();
