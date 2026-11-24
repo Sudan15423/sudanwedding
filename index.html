@@ -69,6 +69,21 @@
             position: relative;
         }
 
+        .map-container {
+        pointer-events: none;
+        }
+        
+        .map-btn {
+            display: block;
+        }
+        
+        @media (max-width: 767px) {
+            .map-container {
+                pointer-events: none;
+            }
+        }
+
+
         .sr-only {
             position: absolute;
             width: 1px;
@@ -1959,6 +1974,29 @@
             validMapBtnTapUntil = 0;
             window.open(MAP_URL, '_blank', 'noopener,noreferrer');
         }
+
+        // Detect if it's a mobile device
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        
+        // Remove click event from map container on mobile devices
+        if (isMobile) {
+            const mapContainer = document.getElementById('mapContainer');
+            if (mapContainer) {
+                mapContainer.style.pointerEvents = 'none';
+            }
+        }
+        
+        // Keep the map button functional on desktop only
+        const mapBtn = document.querySelector('.map-btn');
+        if (mapBtn) {
+            mapBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                if (!isMobile) {
+                    openMapLocation();
+                }
+            });
+        }
+
 
         // Map button: verify that touchstart AND touchend both occurred
         // directly on #mapBtn with < 8px movement (prevents all swipe/ghost clicks)
