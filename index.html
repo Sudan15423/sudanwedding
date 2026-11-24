@@ -1828,7 +1828,11 @@
         const MAP_URL = 'https://maps.app.goo.gl/GLvRtMdJfGXuYzjr6';
         const mapContainer = document.getElementById('mapContainer');
 
-        
+        function openMapLocation() {
+            if (Date.now() < slide3LockedUntil) return;
+            if (Date.now() < suppressClickUntil) return;
+            window.open(MAP_URL, '_blank', 'noopener');
+        }
 
         if (mapContainer) {
             mapContainer.addEventListener('click', e => {
