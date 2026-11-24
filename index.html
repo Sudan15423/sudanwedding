@@ -324,6 +324,7 @@
             max-width: 650px;
             height: 100%;
             max-height: 85dvh;
+            touch-action: pan-y;
         }
 
         .card {
@@ -341,19 +342,23 @@
             flex-direction: column;
             opacity: 0;
             visibility: hidden;
+            pointer-events: none;
             z-index: 1;
             transition: opacity 0.8s ease, visibility 0.8s;
+            touch-action: pan-y;
         }
 
         .card.active {
             opacity: 1;
             visibility: visible;
+            pointer-events: auto;
             z-index: 10;
         }
 
         .card.prev {
             opacity: 0;
             visibility: hidden;
+            pointer-events: none;
             z-index: 1;
         }
 
@@ -1015,10 +1020,18 @@
             filter: saturate(1) contrast(1) brightness(1);
         }
 
-        /* FIX: Locks map elements from being clicked to prevent swipe-triggered
-           synthetic clicks from opening Maps on Firefox mobile. */
-        .map-locked {
-            pointer-events: none !important;
+        /* Mobile / touch devices: visual map is purely non-interactive;
+           only the Map button opens Google Maps. */
+        @media (hover: none), (pointer: coarse) {
+            .map-container {
+                pointer-events: none !important;
+                cursor: default !important;
+            }
+
+            .map-overlay-shield {
+                display: none !important;
+                pointer-events: none !important;
+            }
         }
 
         .map-iframe {
@@ -1032,7 +1045,6 @@
             pointer-events: none;
         }
 
-        /* FIX: Transparent Shield Overlay prevents browsers (Firefox/Safari) from capturing touch/click events prematurely */
         .map-overlay-shield {
             position: absolute;
             inset: 0;
@@ -1636,7 +1648,7 @@
                         <p class="location-title">Mandala Banquet (Prabhu Complex)</p>
                         <p class="location-address">Tinkune, Subidhanagar (3rd Floor)</p>
 
-                        <button type="button" onclick="openMapLocation()" class="btn-action btn-outline map-btn">
+                        <button type="button" id="mapBtn" class="btn-action btn-outline map-btn">
                             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                 stroke-width="2">
                                 <polygon points="1 6 1 22 8 18 15 22 22 18 22 2 15 6 8 2 1 6" />
@@ -1647,9 +1659,8 @@
                         </button>
                     </div>
 
-                    <div class="map-container" id="mapContainer" role="button" tabindex="0"
-                        aria-label="Open Mandala Banquet location in Google Maps">
-                        <div class="map-overlay-shield"></div>
+                    <div class="map-container" id="mapContainer">
+                        <div class="map-overlay-shield" id="mapOverlayShield"></div>
                         <iframe class="map-iframe" id="mapIframe" src="about:blank" frameborder="0" scrolling="no"
                             marginheight="0" marginwidth="0" loading="lazy" title="Mandala Banquet Location Map">
                         </iframe>
@@ -1708,6 +1719,7 @@
 
     <script>
         const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const isMobileOrTouch = window.matchMedia('(hover: none), (pointer: coarse)').matches || navigator.maxTouchPoints > 0;
 
         const bgMusic = document.getElementById('bgMusic');
         const audioBtn = document.getElementById('audioBtn');
@@ -1731,7 +1743,7 @@
             musicIconPause.style.display = 'none';
         });
 
-        bgMusic.addEventListener('error', (e) => {
+        bgMusic.addEventListener('error', () => {
             musicIconPlay.style.display = 'block';
             musicIconPause.style.display = 'none';
         });
@@ -1811,24 +1823,21 @@
         const totalSlides = slides.length;
         const slideTitles = ['The Wedding Of Sudan & Salina', 'Our Story', 'Family Honors', 'When & Where', 'RSVP'];
         let mapLoaded = false;
-        let slide3LockedUntil = 0;
         let slide3EnteredAt = 0;
-        let pointerDownTarget = null;
-        const MAP_LOCK_MS = 1200;
 
-        document.addEventListener('pointerdown', (e) => {
-            pointerDownTarget = e.target;
-        }, true);
-
-        document.addEventListener('touchstart', (e) => {
-            pointerDownTarget = e.target;
-        }, { capture: true, passive: true });
+        // Verified stationary tap state for the Map button on mobile/touch
+        let validMapBtnTapUntil = 0;
+        let mapBtnTouchStart = null;
 
         function announceSlide(index) {
             document.getElementById('slideAnnouncer').innerText = `Slide ${index + 1} of ${totalSlides}: ${slideTitles[index]}`;
         }
 
         function moveSlide(direction) {
+            // Reset any pending tap validation whenever slides change
+            validMapBtnTapUntil = 0;
+            mapBtnTouchStart = null;
+
             slides[currentSlide].classList.remove('active');
 
             if (direction > 0) {
@@ -1846,19 +1855,7 @@
             announceSlide(currentSlide);
 
             if (currentSlide === 3) {
-                // FIX: Lock the map + map button so a synthetic click from the
-                // swipe that brought us here cannot open Google Maps
-                // (Firefox mobile fires synthetic clicks unreliably).
                 slide3EnteredAt = Date.now();
-                slide3LockedUntil = Date.now() + MAP_LOCK_MS;
-                const mc = document.getElementById('mapContainer');
-                const mb = document.querySelector('.map-btn');
-                if (mc) mc.classList.add('map-locked');
-                if (mb) mb.classList.add('map-locked');
-                setTimeout(() => {
-                    if (mc) mc.classList.remove('map-locked');
-                    if (mb) mb.classList.remove('map-locked');
-                }, MAP_LOCK_MS);
 
                 if (!mapLoaded) {
                     const mapFrame = document.getElementById('mapIframe');
@@ -1874,16 +1871,18 @@
         let touchStartY = 0;
         let isSwiping = false;
         let suppressClickUntil = 0;
-        const SWIPE_CLICK_BLOCK_MS = 1200;
+        const SWIPE_CLICK_BLOCK_MS = 1400;
         const container = document.querySelector('.carousel-container');
 
         container.addEventListener('touchstart', e => {
+            if (!e.changedTouches || !e.changedTouches[0]) return;
             touchStartX = e.changedTouches[0].screenX;
             touchStartY = e.changedTouches[0].screenY;
             isSwiping = false;
         }, { passive: true });
 
         container.addEventListener('touchmove', e => {
+            if (!e.changedTouches || !e.changedTouches[0]) return;
             const currentX = e.changedTouches[0].screenX;
             const currentY = e.changedTouches[0].screenY;
             if (Math.abs(currentX - touchStartX) > 10 || Math.abs(currentY - touchStartY) > 10) {
@@ -1898,21 +1897,19 @@
                 const distanceX = touchEndX - touchStartX;
                 const distanceY = touchEndY - touchStartY;
 
-                // Detect meaningful movement directly from start/end coordinates so
-                // coalesced touchmove events on Firefox mobile never bypass suppression.
                 if (isSwiping || Math.abs(distanceX) > 10 || Math.abs(distanceY) > 10) {
                     suppressClickUntil = Date.now() + SWIPE_CLICK_BLOCK_MS;
+                    validMapBtnTapUntil = 0;
                 }
 
                 if (distanceX > 50) moveSlide(-1);
                 if (distanceX < -50) moveSlide(1);
             } else if (isSwiping) {
                 suppressClickUntil = Date.now() + SWIPE_CLICK_BLOCK_MS;
+                validMapBtnTapUntil = 0;
             }
         }, { passive: true });
 
-        // Also track mouse drags so testing in responsive design mode behaves
-        // the same as real touch devices.
         let mouseDragStartX = 0;
         let mouseDragStartY = 0;
         let isMouseDragging = false;
@@ -1932,10 +1929,11 @@
             const distY = Math.abs(e.clientY - mouseDragStartY);
             if (isMouseDragging || distX > 10 || distY > 10) {
                 suppressClickUntil = Date.now() + SWIPE_CLICK_BLOCK_MS;
+                validMapBtnTapUntil = 0;
             }
         });
 
-        // Layer 1: Capture-phase click blocker
+        // Capture-phase blocker for all synthetic/ghost clicks after a swipe
         document.addEventListener('click', e => {
             if (Date.now() < suppressClickUntil) {
                 e.preventDefault();
@@ -1945,38 +1943,82 @@
         }, true);
 
         const MAP_URL = 'https://maps.app.goo.gl/GLvRtMdJfGXuYzjr6';
+        const mapBtn = document.getElementById('mapBtn');
         const mapContainer = document.getElementById('mapContainer');
+        const mapOverlayShield = document.getElementById('mapOverlayShield');
 
-        // Layer 3: Internal guard inside openMapLocation
-        function openMapLocation() {
-            if (Date.now() < slide3LockedUntil) return;
+        function openMapLocation(fromVerifiedTap = false) {
+            if (currentSlide !== 3) return;
             if (Date.now() < suppressClickUntil) return;
+            if (Date.now() - slide3EnteredAt < 650) return;
 
-            const startedOnMapTrigger =
-                pointerDownTarget &&
-                pointerDownTarget.closest &&
-                pointerDownTarget.closest('.map-btn, #mapContainer');
-
-            if (Date.now() - slide3EnteredAt < 1500 && !startedOnMapTrigger) {
+            if (isMobileOrTouch && !fromVerifiedTap && Date.now() > validMapBtnTapUntil) {
                 return;
             }
 
-            pointerDownTarget = null;
-            window.open(MAP_URL, '_blank', 'noopener');
+            validMapBtnTapUntil = 0;
+            window.open(MAP_URL, '_blank', 'noopener,noreferrer');
         }
 
-        if (mapContainer) {
+        // Map button: verify that touchstart AND touchend both occurred
+        // directly on #mapBtn with < 8px movement (prevents all swipe/ghost clicks)
+        if (mapBtn) {
+            mapBtn.addEventListener('touchstart', e => {
+                if (currentSlide !== 3 || Date.now() - slide3EnteredAt < 650) {
+                    mapBtnTouchStart = null;
+                    return;
+                }
+                const t = e.changedTouches[0];
+                mapBtnTouchStart = { x: t.clientX, y: t.clientY, time: Date.now() };
+            }, { passive: true });
+
+            mapBtn.addEventListener('touchend', e => {
+                if (!mapBtnTouchStart) return;
+                const t = e.changedTouches[0];
+                const moveDist = Math.hypot(t.clientX - mapBtnTouchStart.x, t.clientY - mapBtnTouchStart.y);
+                const endTarget = document.elementFromPoint(t.clientX, t.clientY);
+                const releasedOnBtn = endTarget && endTarget.closest('#mapBtn') === mapBtn;
+                mapBtnTouchStart = null;
+
+                if (moveDist < 8 && releasedOnBtn && Date.now() >= suppressClickUntil) {
+                    validMapBtnTapUntil = Date.now() + 500;
+                    e.preventDefault();
+                    openMapLocation(true);
+                }
+            });
+
+            mapBtn.addEventListener('click', e => {
+                e.preventDefault();
+                e.stopPropagation();
+                if (isMobileOrTouch) {
+                    if (Date.now() <= validMapBtnTapUntil) {
+                        openMapLocation(true);
+                    }
+                    return;
+                }
+                openMapLocation(true);
+            });
+        }
+
+        // Visual map container: interactive ONLY on desktop (non-touch)
+        if (!isMobileOrTouch && mapContainer) {
+            mapContainer.setAttribute('role', 'button');
+            mapContainer.setAttribute('tabindex', '0');
+            mapContainer.setAttribute('aria-label', 'Open Mandala Banquet location in Google Maps');
+
             mapContainer.addEventListener('click', e => {
                 e.preventDefault();
                 e.stopPropagation();
-                openMapLocation();
+                openMapLocation(true);
             });
             mapContainer.addEventListener('keydown', e => {
                 if (e.key === 'Enter' || e.key === ' ') {
                     e.preventDefault();
-                    openMapLocation();
+                    openMapLocation(true);
                 }
             });
+        } else if (mapOverlayShield) {
+            mapOverlayShield.remove();
         }
 
         window.addEventListener('keydown', (e) => {
