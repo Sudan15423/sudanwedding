@@ -70,13 +70,13 @@
         }
 
         .map-container {
-        pointer-events: none;
+            pointer-events: none;
         }
-        
+
         .map-btn {
             display: block;
         }
-        
+
         @media (max-width: 767px) {
             .map-container {
                 pointer-events: none;
@@ -1037,7 +1037,8 @@
 
         /* Mobile / touch devices: visual map is purely non-interactive;
            only the Map button opens Google Maps. */
-        @media (hover: none), (pointer: coarse) {
+        @media (hover: none),
+        (pointer: coarse) {
             .map-container {
                 pointer-events: none !important;
                 cursor: default !important;
@@ -1958,7 +1959,6 @@
         }, true);
 
         const MAP_URL = 'https://maps.app.goo.gl/GLvRtMdJfGXuYzjr6';
-        const mapBtn = document.getElementById('mapBtn');
         const mapContainer = document.getElementById('mapContainer');
         const mapOverlayShield = document.getElementById('mapOverlayShield');
 
@@ -1977,7 +1977,7 @@
 
         // Detect if it's a mobile device
         const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-        
+
         // Remove click event from map container on mobile devices
         if (isMobile) {
             const mapContainer = document.getElementById('mapContainer');
@@ -1985,11 +1985,11 @@
                 mapContainer.style.pointerEvents = 'none';
             }
         }
-        
+
         // Keep the map button functional on desktop only
         const mapBtn = document.querySelector('.map-btn');
         if (mapBtn) {
-            mapBtn.addEventListener('click', function(e) {
+            mapBtn.addEventListener('click', function (e) {
                 e.preventDefault();
                 if (!isMobile) {
                     openMapLocation();
